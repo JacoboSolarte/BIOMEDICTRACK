@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'data/auth/supabase_auth_repository.dart';
+import 'data/equipment/supabase_equipment_repository.dart';
+import 'domain/equipment/equipment_repository.dart';
 import 'presentation/auth/auth_page.dart';
 import 'presentation/admin/admin_home_page.dart';
 
@@ -21,7 +23,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final repo = SupabaseAuthRepository(Supabase.instance.client);
+    final authRepo = SupabaseAuthRepository(Supabase.instance.client);
+    final EquipmentRepository equipmentRepo =
+        SupabaseEquipmentRepository(Supabase.instance.client);
     return MaterialApp(
       title: 'BiomedicTrack',
       debugShowCheckedModeBanner: false,
@@ -39,8 +43,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/auth',
       routes: {
-        '/auth': (_) => AuthPage(authRepository: repo),
-        '/admin': (_) => const AdminHomePage(),
+        '/auth': (_) => AuthPage(authRepository: authRepo),
+        '/admin': (_) => AdminHomePage(equipmentRepository: equipmentRepo),
       },
     );
   }
